@@ -13,8 +13,8 @@
 //  歌词数组
 @property (nonatomic, strong) NSMutableArray *musicLyricMutArray;
 
-//  歌曲时间数组
-//@property (nonatomic, strong) NSMutableArray *musicTimeMutArray;
+//  per歌曲时间数组
+@property (nonatomic, strong) NSMutableArray *musicTimeMutArray;
 
 //  歌曲时间分钟数组
 @property (nonatomic, strong) NSMutableArray *musicTimeMinute;

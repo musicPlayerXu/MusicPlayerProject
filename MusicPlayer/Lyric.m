@@ -21,11 +21,11 @@
             NSString *lyricStr = [NSString stringWithContentsOfFile:lyricStrPath encoding:NSUTF8StringEncoding error:nil];
             
             self.musicLyricMutArray = [NSMutableArray array];
-//            self.musicTimeMutArray = [NSMutableArray array];
+            self.musicTimeMutArray = [NSMutableArray array];
             self.musicTimeMinute = [NSMutableArray array];
             self.musicTimeSecond = [NSMutableArray array];
             self.musicTimeMm = [NSMutableArray array];
-            
+            self.perLyricTime = [NSMutableArray array];
             NSArray *allLyricArr = [lyricStr componentsSeparatedByString:@"\n"];
             
            // NSLog(@"%@,l=%ld",allLyricArr,[allLyricArr count]);
@@ -35,21 +35,29 @@
                     NSRange startRange = [perLyric rangeOfString:@"["];
                     NSRange stopRange = [perLyric rangeOfString:@"]"];
                     
-                    NSString *musicTimeStr = [perLyric substringWithRange:NSMakeRange(startRange.location, stopRange.location-startRange.location)];
+                    NSString *musicTimeStr = [perLyric substringWithRange:NSMakeRange(startRange.location, stopRange.location-startRange.location+1)];
                     
-                    NSLog(@"%@,%d,%d",musicTimeStr,startRange.location,stopRange.location);
+//                    NSLog(@"music=%@,start=%ld,stop=%ld,length=%ld",musicTimeStr,startRange.location,stopRange.location,[musicTimeStr length]);
+                    NSString *pertime = [perLyric substringWithRange:NSMakeRange(1, 5)];
                     
-                    if ([perLyric length] == 8){
-                        NSString *minute = [perLyric substringWithRange:NSMakeRange(0, 2)];
-                        NSString *second = [perLyric substringWithRange:NSMakeRange(3, 4)];
-                        NSString *mm = [perLyric substringWithRange:NSMakeRange(5, 6)];
-                        
+                    if ([musicTimeStr length] == 10){
+                        NSString *minute = [perLyric substringWithRange:NSMakeRange(1, 2)];
+                        NSString *second = [perLyric substringWithRange:NSMakeRange(4, 2)];
+//                        NSString *mm = [perLyric substringWithRange:NSMakeRange(7, 2)];
+                       
                         NSNumber *perLyricTime = [NSNumber numberWithInteger:[minute integerValue]*60 +[second integerValue]];
                         
+                        [self.perLyricTime addObject:perLyricTime];
+//                        NSLog(@"min=%@,sec=%@,mm=%@,perTime=%@",minute,second,mm,perLyricTime);
+                    }
+                    if ([perLyric length] > 10){
+//                        [self.musicTimeMutArray addObject:[perLyric substringWithRange:NSMakeRange(1, 5)]];
+                        [self.musicTimeMutArray addObject:pertime];
                         NSString *lyric = [perLyric substringFromIndex:10];
                         [self.musicLyricMutArray addObject:lyric];
-                        NSLog(@"min=%@,sec=%@,mm=%@,perTime=%@,lyric=%@",minute,second,mm,perLyricTime,lyric);
-                        
+                    }else{
+                        [self.musicLyricMutArray addObject:@""];
+                        [self.musicTimeMutArray addObject:pertime];
                     }
                 }
             }
